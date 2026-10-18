@@ -8,6 +8,14 @@ Serveur MCP pour suivre ses triomphes et sceaux Destiny 2 via l'API Bungie.
 - `search_triumph` : recherche un triomphe par mot-clé.
 - `doable_triumphs` : triomphes faisables (sans les retirés ni les DLC non possédés).
 - `calibrate_week` / `current_week` : rotation hebdomadaire (mission de Petra, défi Ascendant).
+- `next_best_triumphs` : top des triomphes les plus rapides à finir.
+- `monument_planner` : catégories du Monument des Triomphes, avec les triomphes faisables.
+- `seal_roadmap` : plan d'un sceau (rapides, rotation, longs).
+- `weekly_checklist` : rotation de la semaine et état des triomphes liés.
+- `collections_missing` / `exotic_checklist` : objets de Collections manquants par source.
+- `catalyst_tracker` : catalyseurs exotiques en cours.
+- `recent_activities` / `raid_report` / `clan_overview` : activité, raids et clan.
+- `compare_players` : compare un sceau avec un autre joueur.
 
 ## Installation
 1. Crée une application sur https://www.bungie.net/en/Application (aucune permission OAuth requise,

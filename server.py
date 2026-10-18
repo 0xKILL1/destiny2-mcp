@@ -7,6 +7,7 @@ Variables d'environnement :
 """
 import json
 import os
+import sys
 import urllib.request
 from functools import lru_cache
 
@@ -263,6 +264,10 @@ def current_week() -> str:
         f"Mission de Petra : {mission}\nDéfi Ascendant : {asc}"
     )
 
+
+import extra  # noqa: E402  (outils supplémentaires)
+
+extra.register(mcp, sys.modules[__name__])
 
 if __name__ == "__main__":
     mcp.run()
