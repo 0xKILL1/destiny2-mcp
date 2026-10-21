@@ -300,3 +300,30 @@ def register(mcp, h):
             name = m["destinyUserInfo"].get("bungieGlobalDisplayName") or m["destinyUserInfo"].get("displayName")
             lines.append(f"- {name} (dernière connexion {ts}){' [en ligne]' if m.get('isOnline') else ''}")
         return "\n".join(lines)
+
+    @mcp.tool()
+    def vault_items(bungie_name: str = "", access_token: str = "") -> str:
+        """Liste les objets du coffre (inventaire de profil). Demande un jeton OAuth Bungie (BUNGIE_OAUTH_TOKEN)."""
+        import json
+        import os
+        import urllib.request
+
+        token = access_token or os.environ.get("BUNGIE_OAUTH_TOKEN", "")
+        if not token:
+            raise RuntimeError("Jeton OAuth manquant : définis BUNGIE_OAUTH_TOKEN.")
+        mtype, mid = h.player(bungie_name)
+        req = urllib.request.Request(
+            f"{h.API}/Destiny2/{mtype}/Profile/{mid}/?components=102",
+            headers={"X-API-Key": os.environ["BUNGIE_API_KEY"], "Authorization": f"Bearer {token}"},
+        )
+        with urllib.request.urlopen(req, timeout=60) as r:
+            out = json.load(r)
+        if out.get("ErrorCode") != 1:
+            raise RuntimeError(f"Erreur Bungie : {out.get('Message')}")
+        items = out["Response"].get("profileInventory", {}).get("data", {}).get("items", [])
+        defs = h.definition("DestinyInventoryItemDefinition")
+        lines = []
+        for it in items[:200]:
+            name = defs.get(str(it["itemHash"]), {}).get("displayProperties", {}).get("name", f"hash {it['itemHash']}")
+            lines.append(f"- {name} x{it.get('quantity', 1)} [instance {it.get('itemInstanceId', '-')}]")
+        return f"Coffre : {len(items)} objets\n" + "\n".join(lines)
